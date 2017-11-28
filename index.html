@@ -10,6 +10,7 @@
 <body>
 
 <div id="game"></div>
+<script src="assets/js/phaser.js"></script>
 
     
     
@@ -19,7 +20,8 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, cr
 
 function preload() {
 
-    
+    //missing invaders bullet that the player will be shooting
+    game.load.image('bullet','assets/games/invaders/bullet.png');
     game.load.image('enemyBullet', 'assets/games/invaders/enemy-bullet.png');
     game.load.spritesheet('invader', 'assets/games/invaders/invader32x32x4.png', 32, 32);
     game.load.image('ship', 'assets/games/invaders/player.png');
@@ -29,7 +31,9 @@ function preload() {
 
 }
 
-
+//missing two variables
+var players;
+var aliens;
 var bullets;
 var bulletTime = 0;
 var cursors;
@@ -82,7 +86,7 @@ function create() {
     aliens.enableBody = true;
     aliens.physicsBodyType = Phaser.Physics.ARCADE;
 
-    // createAliens();
+    createAliens();
 
     //  The score
     scoreString = 'Score : ';
@@ -142,10 +146,16 @@ function createAliens () {
 
     function setupInvader (invader) {
 
-        
+    invader.anchor.x=0.5;
+    invader.anchor.y=0.5;
+    invader.animations.add('kaboom');
 
     }
 
+    function descend(){
+        //makes the aliens come down the screen. Move 10 pixels down everytime this function is called 
+        aliens.y+=10;
+    }
 
 
 
@@ -316,7 +326,16 @@ function resetBullet (bullet) {
 
 }
 
-
+//this function makes the game start all over again
+function restart(){
+    lives.callAll('revive');
+    aliens.removeAll();
+    createAliens();
+    player.revive();
+    stateText.visible() = false;
+    
+    
+}
 </script>
 
 </body>
